@@ -26,8 +26,7 @@ const DUMMY_QUOTES = [
 
 const AllQuotes = () => { 
   return (
-    <Fragment>
-      <div>AllQuotes</div>      
+    <Fragment>      
       <QuoteList quotes={DUMMY_QUOTES}/>
     </Fragment>
 
