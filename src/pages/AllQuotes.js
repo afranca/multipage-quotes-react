@@ -1,33 +1,35 @@
-import React, {Fragment} from 'react'
+import React, {Fragment, useEffect} from 'react'
 import QuoteList from '../components/quotes/QuoteList';
-
-const DUMMY_QUOTES = [
-  {
-    id: "q1",
-    author: "Albert Einstein",
-    text: "Two things are infinite: the universe and human stupidity; and I am not sure about the universe",
-  },
-  {
-    id: "q2",
-    author: "Mahatma Gandhi",
-    text: "Be the change that you wish to see in the world",
-  },
-  {
-    id: "q3",
-    author: "Frank Zappa",
-    text: "Without deviation from the norm, progress is not possible",
-  },
-  {
-    id: "q4",
-    author: "Richard Dawkins",
-    text: "We are all atheists about most of the gods that humanity has ever believed in. Some of us just go one god further",
-  },
-];
+import LoadingSpinner from '../components/UI/LoadingSpinner';
+import useHttp from "../hooks/use-http";
+import { getAllQuotes } from "../lib/api";
+import NoQuotesFound from "../components/quotes/NoQuotesFound"
 
 const AllQuotes = () => { 
+  const { sendRequest, status, data: loadedQuotes, error } = useHttp(getAllQuotes, true);
+
+  useEffect( () => {
+    sendRequest();
+  }, [sendRequest]);
+
+  if (status === 'pending'){
+    return <div className='centered'>
+      <LoadingSpinner />
+    </div>
+  }
+
+  if (error){
+    return <p className='centered focused'>
+      {error}
+    </p>
+  }
+  
+  if (status === 'completed' && (!loadedQuotes || loadedQuotes.length === 0)){
+    return <NoQuotesFound />
+  }
   return (
     <Fragment>      
-      <QuoteList quotes={DUMMY_QUOTES}/>
+      <QuoteList quotes={loadedQuotes}/>
     </Fragment>
 
   )
