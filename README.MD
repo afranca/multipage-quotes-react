@@ -1,2 +1,2 @@
-Shortcut for for Arrow Function component:
-'rafce'
+Shortcuts:
+Arrow Function component -> 'rafce'
